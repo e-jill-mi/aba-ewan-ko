@@ -1,0 +1,198 @@
+public class HospitalBillingSystemNoScanner {
+    public static void main(String[] args) {
+        // Declared input values
+        String name = "Juan Dela Cruz";
+        String id = "P001";
+        int age = 35;
+        int rno = 101;
+        int dc = 5;
+        String dcode = "DENGUE";
+        String type = "PRIVATE";
+
+        int numExtraPersons = 1;
+        double doctorFee = 5000.00;
+        double nursingFee = 2500.00;
+        double laboratoryFee = 3000.00;
+        double imagingFee = 4000.00;
+        double medicineCost = 3500.00;
+        double emergencyFee = 2000.00;
+
+        double facilityFee = 5000.00;
+        double adminFee = 1500.00;
+        double equipmentFee = 2500.00;
+
+        double discountPercentage = 10.0;
+        double cashDeposit = 10000.00;
+
+        // Room rate based on room type
+        double ratepday;
+
+        switch (type.toUpperCase()) {
+            case "WARD":
+                ratepday = 1500.00;
+                break;
+            case "SEMI-PRIVATE":
+                ratepday = 2500.00;
+                break;
+            case "PRIVATE":
+                ratepday = 4000.00;
+                break;
+            case "VIP":
+                ratepday = 7500.00;
+                break;
+            default:
+                type = "WARD";
+                ratepday = 1500.00;
+        }
+
+        // Insurance coverage based on diagnosis
+        double calcInsuCove;
+
+        switch (dcode.toUpperCase()) {
+            case "DENGUE":
+                calcInsuCove = 16000.00;
+                break;
+            case "PNEUMONIA":
+                calcInsuCove = 32000.00;
+                break;
+            case "TYPHOID":
+                calcInsuCove = 19500.00;
+                break;
+            case "APPENDECTOMY":
+                calcInsuCove = 24000.00;
+                break;
+            default:
+                calcInsuCove = 0.00;
+        }
+
+        double extraPersonFeePerDay = 100.00;
+
+        // Expense calculations
+        double basicRoomExpense = ratepday * dc;
+        double extraPersonExpense = numExtraPersons * extraPersonFeePerDay * dc;
+        double totalRoomExpenses = basicRoomExpense + extraPersonExpense;
+
+        double totalMedicalExpenses = doctorFee + nursingFee + laboratoryFee + imagingFee + medicineCost + emergencyFee;
+
+        double totalHospitalExpenses = facilityFee + adminFee + equipmentFee;
+
+        double overallHospitalBill = totalRoomExpenses + totalMedicalExpenses + totalHospitalExpenses;
+
+        double discountAmount = overallHospitalBill * (discountPercentage / 100.0);
+
+        double amountAfterDiscount = overallHospitalBill - discountAmount;
+
+        double actualInsuranceCovered = Math.min(calcInsuCove, Math.max(0.0, amountAfterDiscount));
+
+        double patientFinancialResponsibility = Math.max(0.0, amountAfterDiscount - actualInsuranceCovered);
+
+        double remainingBalance = Math.max(0.0, patientFinancialResponsibility - cashDeposit);
+
+        // Resource analysis
+        double averageDailyCost = dc > 0 ? overallHospitalBill / dc : 0.0;
+
+        double medicalExpensePercentage = 0.0;
+        double roomExpensePercentage = 0.0;
+
+        if (overallHospitalBill > 0) {
+            medicalExpensePercentage =
+                    totalMedicalExpenses / overallHospitalBill * 100.0;
+            roomExpensePercentage =
+                    totalRoomExpenses / overallHospitalBill * 100.0;
+        }
+
+        double insuranceCoveragePercentage =
+                amountAfterDiscount > 0 ? actualInsuranceCovered / amountAfterDiscount * 100.0 : 0.0;
+
+        // Logical analysis
+        boolean isHighBill = overallHospitalBill >= 50000.00;
+        boolean isLongStay = dc > 5;
+        boolean isInsuranceSufficient = calcInsuCove >= patientFinancialResponsibility;
+        boolean isBalanceZeroOrLess = remainingBalance <= 0.0;
+
+        boolean isHighCostHospitalization = isHighBill && isLongStay;
+
+        boolean isInsuranceConsideredSufficient = isInsuranceSufficient && isBalanceZeroOrLess;
+
+        boolean isMedicalExpensesFiftyPercentOrMore = medicalExpensePercentage >= 50.0;
+
+        // Final report
+        System.out.println("==================================================");
+        System.out.println(" HOSPITAL BILLING AND RESOURCE ANALYSIS REPORT ");
+        System.out.println("==================================================");
+
+        System.out.println("Patient Information");
+        System.out.println(" • Patient Name: " + name);
+        System.out.println(" • Patient ID: " + id);
+        System.out.println(" • Age: " + age + " years old");
+        System.out.println(" • Room Number: " + rno);
+        System.out.println(" • Days Confined: " + dc);
+        System.out.println(" • Medical Diagnosis: " + dcode);
+        System.out.println(" • Room Type Category: " + type);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Room Expense Summary");
+        System.out.printf(" • Basic Room Expense: PHP %,.2f%n",
+                basicRoomExpense);
+        System.out.printf(" • Extra Person Expense: PHP %,.2f%n",
+                extraPersonExpense);
+        System.out.printf(" • Total Room Expense: PHP %,.2f%n",
+                totalRoomExpenses);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Medical Expense Summary");
+        System.out.printf(" • Total Medical Expenses: PHP %,.2f%n",
+                totalMedicalExpenses);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Hospital Expense Summary");
+        System.out.printf(" • Total Hospital Expenses: PHP %,.2f%n",
+                totalHospitalExpenses);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Resource Analysis");
+        System.out.printf(" • Average Daily Hosp. Cost: PHP %,.2f per day%n",
+                averageDailyCost);
+        System.out.printf(" • Medical Expense Percent: %.2f%%%n",
+                medicalExpensePercentage);
+        System.out.printf(" • Room Expense Percent: %.2f%%%n",
+                roomExpensePercentage);
+        System.out.printf(" • Insurance Cover Percent: %.2f%%%n",
+                insuranceCoveragePercentage);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Financial Summary");
+        System.out.printf(" • Overall Hospital Bill: PHP %,.2f%n",
+                overallHospitalBill);
+        System.out.printf(" • Discount Amount: PHP %,.2f%n",
+                discountAmount);
+        System.out.printf(" • Amount After Discount: PHP %,.2f%n",
+                amountAfterDiscount);
+        System.out.printf(" • Insurance Coverage: PHP %,.2f%n",
+                actualInsuranceCovered);
+        System.out.printf(" • Patient Responsibility: PHP %,.2f%n",
+                patientFinancialResponsibility);
+        System.out.printf(" • Cash Deposit: PHP %,.2f%n",
+                cashDeposit);
+        System.out.printf(" • Remaining Balance: PHP %,.2f%n",
+                remainingBalance);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println(" 1. Total hospital bill is PHP 50,000 or higher? "
+                + isHighBill);
+        System.out.println(" 2. Patient stayed for more than 5 days? "
+                + isLongStay);
+        System.out.println(" 3. Insurance coverage is sufficient after discount? "
+                + isInsuranceSufficient);
+        System.out.println(" 4. Remaining balance is zero or less? "
+                + isBalanceZeroOrLess);
+        System.out.println(" 5. Hospitalization is considered high-cost? "
+                + isHighCostHospitalization);
+        System.out.println(" 6. Insurance is considered sufficient? "
+                + isInsuranceConsideredSufficient);
+        System.out.println(" 7. Medical expenses represent 50% or more of overall bill? "
+                + isMedicalExpensesFiftyPercentOrMore);
+        System.out.println("==================================================");
+    }
+}
+// si jill
